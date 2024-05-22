@@ -18,15 +18,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     const allInformationTicket = await pdfParse(dataBuffer);
     const ticketText = allInformationTicket.text.split("\n").filter((v) => v.trim());
 
-    const extractedData = {
-      customerNumber: "",
-      referenceMonth: "",
-      electricity: [{}],
-      injectedEnergy: [{}],
-      compensatedEnergy: [{}],
-      contributionPublicLighting: "",
-    };
-
     function isNumber(value: string) {
       const normalizedValue = parseFloat(value.replace(",", "."));
       return !isNaN(normalizedValue) && value.trim() !== "";
@@ -43,6 +34,15 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         const key = valueInformation[index];
         return { [key]: value };
       });
+
+    const extractedData = {
+      customerNumber: "",
+      referenceMonth: "",
+      electricity: [{}],
+      injectedEnergy: [{}],
+      compensatedEnergy: [{}],
+      contributionPublicLighting: "",
+    };
 
     const customerIndex = ticketText.findIndex((item) => item.includes("Nº DO CLIENTE"));
     const referentIndex = ticketText.findIndex((item) => item.includes("Referente a"));
