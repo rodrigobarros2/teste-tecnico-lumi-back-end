@@ -2,10 +2,13 @@ import express from "express";
 import multer from "multer";
 import pdfParse from "pdf-parse";
 import { PrismaClient } from "@prisma/client";
+import cors from "cors";
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 const prisma = new PrismaClient();
+
+app.use(cors());
 
 app.post("/upload", upload.single("file"), async (req, res) => {
   if (!req.file) {
