@@ -75,6 +75,27 @@ app.get("/user", async (req, res) => {
   }
 });
 
+app.get("/user/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const data = await prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!data) {
+      return res.status(404).json({ error: "Não foram encontrados dados para o ID fornecido." });
+    }
+
+    res.json(data);
+  } catch (error) {
+    console.error("Erro ao buscar dados:", error);
+    res.status(500).json({ error: "Ocorreu um erro ao buscar os dados." });
+  }
+});
+
 app.listen(3333, () => {
   console.log("Server started on http://localhost:3000");
 });
