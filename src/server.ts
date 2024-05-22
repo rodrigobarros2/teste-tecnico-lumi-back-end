@@ -76,17 +76,21 @@ app.get("/user", async (req, res) => {
 });
 
 app.get("/user/:id", async (req, res) => {
-  const id = req.params.id;
+  const customerNumber = req.params.id;
+
+  if (!customerNumber) {
+    return res.status(400).json({ error: "É necessário fornecer o número do cliente." });
+  }
 
   try {
-    const data = await prisma.user.findUnique({
+    const data = await prisma.user.findMany({
       where: {
-        id: id,
+        customerNumber,
       },
     });
 
-    if (!data) {
-      return res.status(404).json({ error: "Não foram encontrados dados para o ID fornecido." });
+    if (data.length === 0) {
+      return res.status(404).json({ error: "Não foram encontrados dados para o número do cliente fornecido." });
     }
 
     res.json(data);
