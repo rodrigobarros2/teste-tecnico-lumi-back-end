@@ -86,12 +86,36 @@ app.get("/user", async (req, res) => {
       where: {
         customerNumber: filter.toString(),
       },
+      include: { documents: true },
     });
 
     res.json(user);
   } catch (error) {
     console.error("Erro ao buscar usuário:", error);
     res.status(500).json({ error: "Ocorreu um erro ao buscar o usuário." });
+  }
+});
+
+const uploadPdf = multer({ dest: "uploads/" });
+
+app.post("/uploadpdf/:id", uploadPdf.single("pdf"), async (req, res) => {
+  try {
+    const { originalname, path } = req.file!;
+    const { id } = req.params;
+    console.log("🚀 ~ app.post ~ userId:", id);
+
+    const document = await prisma.document.create({
+      data: {
+        fileName: originalname,
+        filePath: path,
+        userId: id,
+      },
+    });
+
+    res.status(200).json({ document });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao fazer upload do arquivo." });
   }
 });
 

@@ -8,11 +8,21 @@ datasource db {
 }
 
 model User {
-  id                         String @id @default(uuid())
+  id                         String     @id @default(uuid())
   customerNumber             String
   referenceMonth             String
   electricity                Json[]
   injectedEnergy             Json[]
   compensatedEnergy          Json[]
   contributionPublicLighting String
+  documents                  Document[]
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  fileName  String
+  filePath  String
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
