@@ -69,37 +69,29 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 });
 
 app.get("/user", async (req, res) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.json(users);
-  } catch (error) {
-    console.error("Erro ao buscar usuários:", error);
-    res.status(500).json({ error: "Erro ao buscar usuários" });
-  }
-});
-
-app.get("/user/:id", async (req, res) => {
-  const customerNumber = req.params.id;
-
-  if (!customerNumber) {
-    return res.status(400).json({ error: "É necessário fornecer o número do cliente." });
-  }
+  const { filter } = req.query;
 
   try {
-    const data = await prisma.user.findMany({
+    if (!filter) {
+      const users = await prisma.user.findMany();
+
+      const uniqueCustomerNumbers = users
+        .map((item) => item.customerNumber)
+        .filter((value, index, self) => self.indexOf(value) === index);
+
+      return res.json(uniqueCustomerNumbers);
+    }
+
+    const user = await prisma.user.findMany({
       where: {
-        customerNumber,
+        customerNumber: filter.toString(),
       },
     });
 
-    if (data.length === 0) {
-      return res.status(404).json({ error: "Não foram encontrados dados para o número do cliente fornecido." });
-    }
-
-    res.json(data);
+    res.json(user);
   } catch (error) {
-    console.error("Erro ao buscar dados:", error);
-    res.status(500).json({ error: "Ocorreu um erro ao buscar os dados." });
+    console.error("Erro ao buscar usuário:", error);
+    res.status(500).json({ error: "Ocorreu um erro ao buscar o usuário." });
   }
 });
 
