@@ -3,6 +3,7 @@ import multer from "multer";
 import pdfParse from "pdf-parse";
 import { PrismaClient } from "@prisma/client";
 import cors from "cors";
+import path from "path";
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -58,13 +59,28 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     extractedData.compensatedEnergy = formatData(ticketText[electricityIndex + 2].split(/\s+/));
     extractedData.contributionPublicLighting = extractNumber(ticketText[electricityIndex + 3].toString());
 
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        referenceMonth: extractedData.referenceMonth,
+        customerNumber: extractedData.customerNumber,
+      },
+    });
+
+    if (existingUser) {
+      throw new Error(`Usuário com mês de refencia ${extractedData.referenceMonth} já existe`);
+    }
+
     const user = await prisma.user.create({
       data: extractedData,
     });
 
     res.send(user);
-  } catch (err) {
-    res.status(500).send(err);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
   }
 });
 
@@ -98,11 +114,11 @@ app.get("/user", async (req, res) => {
 
 const uploadPdf = multer({ dest: "uploads/" });
 
-app.post("/uploadpdf/:id", uploadPdf.single("pdf"), async (req, res) => {
+app.post("/uploadpdf/:id", uploadPdf.single("file"), async (req, res) => {
   try {
     const { originalname, path } = req.file!;
+
     const { id } = req.params;
-    console.log("🚀 ~ app.post ~ userId:", id);
 
     const document = await prisma.document.create({
       data: {
@@ -119,6 +135,30 @@ app.post("/uploadpdf/:id", uploadPdf.single("pdf"), async (req, res) => {
   }
 });
 
+app.get("/download/:id", async (req, res) => {
+  const fileId = req.params.id;
+
+  try {
+    const fileRecord = await prisma.document.findUnique({
+      where: { id: fileId },
+    });
+
+    if (!fileRecord) {
+      return res.status(404).send("Arquivo não encontrado.");
+    }
+
+    res.download(fileRecord.filePath, fileRecord.fileName, (err) => {
+      if (err) {
+        console.error("Erro ao fazer o download do arquivo:", err);
+        res.status(500).send("Erro ao fazer o download do arquivo");
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao consultar o banco de dados:", error);
+    res.status(500).send("Erro ao consultar o banco de dados.");
+  }
+});
+
 app.listen(3333, () => {
-  console.log("Server started on http://localhost:3000");
+  console.log("Server started on http://localhost:3333");
 });
