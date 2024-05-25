@@ -1,16 +1,12 @@
-FROM node:latest
+FROM node:lts-alpine
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm ci
-
-COPY . .
+RUN npm i
 
 RUN npm run build
-
-COPY . .
 
 RUN npx prisma migrate deploy
 
