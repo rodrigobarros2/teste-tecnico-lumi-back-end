@@ -7,6 +7,7 @@ import path from "path";
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
+const uploadPdf = multer({ dest: "uploads/" });
 const prisma = new PrismaClient();
 
 app.use(cors());
@@ -111,8 +112,6 @@ app.get("/user", async (req, res) => {
     res.status(500).json({ error: "Ocorreu um erro ao buscar o usuário." });
   }
 });
-
-const uploadPdf = multer({ dest: "uploads/" });
 
 app.post("/uploadpdf/:id", uploadPdf.single("file"), async (req, res) => {
   try {
