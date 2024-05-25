@@ -10,11 +10,11 @@ COPY . .
 
 RUN npx prisma migrate deploy
 
-COPY prisma /usr/src/app/prisma
+COPY prisma ./
 
 RUN npm run build
 
-COPY dist /usr/src/app/dist
+COPY dist ./
 
 EXPOSE 3000
 
