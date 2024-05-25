@@ -23,7 +23,7 @@ RUN npx prisma migrate deploy
 RUN npm run build
 
 # Expõe a porta que a aplicação irá rodar
-EXPOSE 3333
+EXPOSE 3000
 
 # Comando para iniciar a aplicação
 CMD ["npm", "run", "start"]
