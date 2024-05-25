@@ -9,6 +9,8 @@ COPY package.json ./
 COPY package-lock.json ./
 
 # Instala as dependências do projeto
+RUN docker-compose up -d
+
 RUN npm install
 
 # Copia o restante do código da aplicação
