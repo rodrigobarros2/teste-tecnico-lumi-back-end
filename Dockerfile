@@ -16,8 +16,6 @@ COPY . .
 
 # Gera o código do Prisma
 
-RUN npx prisma init
-
 RUN npx prisma migrate dev
 
 RUN npx prisma generate
