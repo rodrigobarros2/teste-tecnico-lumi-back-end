@@ -16,11 +16,13 @@ COPY . .
 
 # Gera o código do Prisma
 
-RUN npm run build
+RUN npx prisma init
 
 RUN npx prisma migrate dev
 
 RUN npx prisma generate
+
+RUN npm run build
 
 # Expõe a porta que a aplicação irá rodar
 EXPOSE 3333
