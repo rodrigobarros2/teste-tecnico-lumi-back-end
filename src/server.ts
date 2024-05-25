@@ -78,7 +78,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     res.send(user);
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
+      res.status(409).json({ error: error.message });
     } else {
       res.status(500).json({ error: "An unexpected error occurred" });
     }
