@@ -6,7 +6,11 @@ COPY package*.json ./
 
 RUN npm i
 
+COPY . .
+
 RUN npm run build
+
+COPY . .
 
 RUN npx prisma migrate deploy
 
