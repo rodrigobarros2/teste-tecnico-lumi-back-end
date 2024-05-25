@@ -15,7 +15,10 @@ RUN npm install
 COPY . .
 
 # Gera o código do Prisma
-RUN prisma migrate dev
+
+RUN npm run build
+
+RUN npx prisma migrate dev
 
 RUN npx prisma generate
 
@@ -23,4 +26,4 @@ RUN npx prisma generate
 EXPOSE 3333
 
 # Comando para iniciar a aplicação
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
