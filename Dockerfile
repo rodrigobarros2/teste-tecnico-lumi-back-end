@@ -17,6 +17,6 @@ COPY . .
 EXPOSE 3333
 
 # Define o comando para iniciar a aplicação
-CMD ["npm", "./dist/server.js"]
+CMD ["npm", "start"]
 
 
