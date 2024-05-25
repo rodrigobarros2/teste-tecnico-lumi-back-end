@@ -1,17 +1,15 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  postgres:
-    image: postgres:alpine
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "5432:5432"
-    container_name: "lumini-teste-tecnico"
-    restart: always
+      - "3000:3000"
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - .:/app
+      - /app/node_modules
     environment:
-      POSTGRES_USER: pguser
-      POSTGRES_PASSWORD: pgpassword
-
-volumes:
-  postgres:
+      NODE_ENV: development
+    command: npm start
