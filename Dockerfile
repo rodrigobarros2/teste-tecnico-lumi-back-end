@@ -4,13 +4,11 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm i
+RUN npm ci
 
 COPY . .
 
 RUN npx prisma migrate deploy
-
-COPY prisma ./
 
 RUN npm run build
 
