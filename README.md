@@ -2,7 +2,7 @@
 ## Foi realizado o deploy da aplicação
 
 
-https://lumini-teste-tecnico-front.vercel.app/
+https://lumini-teste-tecnico-front.vercel.app
 
 
 Caso queiram rodar localmente, basta seguir os seguintes passos
@@ -36,7 +36,7 @@ Instale as dependências
 ```
 
 ```bash
-  docker-compose up -d
+  docker-compose up -d (Precisa ter o docker instalado)
 ```
 
 Inicie o servidor
@@ -59,7 +59,7 @@ Para rodar os testes, rode o seguinte comando
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
 
-Database Local
+Database Local 
 
 `DATABASE_URL="postgresql://pguser:pgpassword@localhost:5432/mydb?schema=public"`
 
