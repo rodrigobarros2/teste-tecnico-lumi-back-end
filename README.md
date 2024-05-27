@@ -28,6 +28,10 @@ Instale as dependências
 ```
 
 ```bash
+  docker-compose up -d (Precisa ter o docker instalado)
+```
+
+```bash
   npx prisma migrate dev
 ```
 
@@ -35,9 +39,7 @@ Instale as dependências
   npx prisma generate
 ```
 
-```bash
-  docker-compose up -d (Precisa ter o docker instalado)
-```
+
 
 Inicie o servidor
 
