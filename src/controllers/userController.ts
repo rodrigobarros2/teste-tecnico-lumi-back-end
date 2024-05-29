@@ -51,7 +51,6 @@ export const getUser = async (req: Request, res: Response) => {
       const uniqueCustomerNumbers = users
         .map((item) => item.customerNumber)
         .filter((value, index, self) => self.indexOf(value) === index);
-
       return res.json(uniqueCustomerNumbers);
     }
 
